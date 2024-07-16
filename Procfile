@@ -1,1 +1,1 @@
-web: gunicorn shift_scheduler.wsgi --log-file -
+web: gunicorn shift_scheduler.wsgi:application
