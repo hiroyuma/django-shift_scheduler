@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Shift Scheduler</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>シフト希望提出フォーム</h1>
+    <form id="shift-form" method="post">
+        {% csrf_token %}
+        <label for="name">名前:</label>
+        <input type="text" id="name" name="name" value="{{ form.initial.name }}" required><br>
+        <label for="date">日付:</label>
+        <input type="date" id="date" name="date" required><br>
+        <label for="start_time">出勤時間:</label> 
+        <select id="start_time" name="start_time" required></select><br> 
+        <label for="end_tme">退勤時間:</label> 
+        <select id="end_time" name="end_time" required></select><br> 
+        <button type="submit">提出</button>
+    </form>
+
+    <!--<h2>シフト希望の確認<h2>
+        <u1>
+            {% for shift in user_shifts %}
+            <li>{{ shift.date|date:"Y年m月d日" }}: {{ shift.start_time }} - {{ shift.end_time }}</li>
+        {% endfor %}
+        </u1>-->
+    <script>
+        // 選択肢を生成する関数
+        function populateTimeSelect(selectId, startHour, endHour) {
+            var select = document.getElementById(selectId);
+            for (var hour = startHour; hour <= endHour; hour++) {
+                for (var minute = 0; minute < 60; minute += 15) { // 15分刻みの
+                    var option = document.createElement('option');
+                    var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minute).slice(-2); // 時間を文字列にフォーマット
+                    option.text = timeString;
+                    option.value = timeString;
+                    select.appendChild(option);
+                }
+            }
+        }
+
+        // ページのロード時に選択肢を生成
+        window.onload = function() {
+            populateTimeSelect('start_time', 18, 26);    //関数にいく
+            populateTimeSelect('end_time', 21, 26);      //関数にいく
+        };
+    </script>
+</body>
+</html>
