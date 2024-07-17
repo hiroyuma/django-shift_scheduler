@@ -3,24 +3,21 @@ from django.shortcuts import render, redirect
 from .forms import ShiftForm
 from .models import Shift
 from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-import datetime
 
 
+@login_required
 def index(request):
     if request.method == 'POST':
         print("POSTを受け取った")
         print(request.POST)
         form = ShiftForm(request.POST)
         if form.is_valid():
-            form.save()
-            print('正しく日にちが保存された')
-            request.session['neme'] = form.cleaned_data['name']#名前を保存
-            print(f"{request.session['neme']}を保存した") 
             shift = form.save(commit=False)
             shift.user = request.user
             shift.save()            
-
+            print('正しく日にちが保存された')
+            request.session['name'] = form.cleaned_data['name'] #名前を保存
+            print(f"{request.session['neme']}を保存した") 
             return redirect('index')
         else:
             print('正しく日にちが保存できなかった')
