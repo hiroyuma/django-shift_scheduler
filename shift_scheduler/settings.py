@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -59,13 +60,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shift_scheduler.wsgi.application'
 
-# Database
+# Databadj_database_url.config(default=os.getenv('postgresql://django_shift_scheduler_database_user:DCNWItHX3v8e8Te1UAATGfQ70sw4LywG@dpg-cqbj24qju9rs73924b40-a/django_shift_scheduler_database'))se
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'default': dj_database_url.config(
+        default='postgres://django_shift_scheduler_database_user:DCNWItHX3v8e8Te1UAATGfQ70sw4LywG@dpg-cqbj24qju9rs73924b40-a/django_shift_scheduler_database'
+    )
+    #'default': {
+        #'ENGINE': 'django.db.backends.postgresql',
+        #'NAME': 'django_shift_scheduler_database',
+        #'USER': 'django_shift_scheduler_database_user',
+        #'PASSWORD': 'DCNWItHX3v8e8Te1UAATGfQ70sw4LywG',
+        #'HOST': 'dpg-cqbj24qju9rs73924b40-a',
+        #'PORT': '5432',
     }
-}
+#}
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
