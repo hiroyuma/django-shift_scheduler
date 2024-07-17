@@ -1,11 +1,10 @@
 import os
-import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '4+x84l^u1=xr#o(&_@$ve&oj7r5zo3ih@g3odxem%=0$cw!c1c'
@@ -60,22 +59,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shift_scheduler.wsgi.application'
 
-# Databadj_database_url.config(default=os.getenv('postgresql://django_shift_scheduler_database_user:DCNWItHX3v8e8Te1UAATGfQ70sw4LywG@dpg-cqbj24qju9rs73924b40-a/django_shift_scheduler_database'))se
+# Database
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 DATABASES = {
-        'default': dj_database_url.config(
-        default='postgres://django_shift_scheduler_database_user:DCNWItHX3v8e8Te1UAATGfQ70sw4LywG@dpg-cqbj24qju9rs73924b40-a/django_shift_scheduler_database'
-    )
-    #'default': {
-        #'ENGINE': 'django.db.backends.postgresql',
-        #'NAME': 'django_shift_scheduler_database',
-        #'USER': 'django_shift_scheduler_database_user',
-        #'PASSWORD': 'DCNWItHX3v8e8Te1UAATGfQ70sw4LywG',
-        #'HOST': 'dpg-cqbj24qju9rs73924b40-a',
-        #'PORT': '5432',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
-#}
+}
 
 # Password validation
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -92,6 +88,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
+
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -99,6 +97,8 @@ USE_L10N = True
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
