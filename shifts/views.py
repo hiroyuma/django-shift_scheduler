@@ -17,7 +17,7 @@ def index(request):
             shift.save()            
             print('正しく日にちが保存された')
             request.session['name'] = form.cleaned_data['name'] #名前を保存
-            print(f"{request.session['neme']}を保存した") 
+            print(f"{request.session['name']}を保存した") 
             return redirect('index')
         else:
             print('正しく日にちが保存できなかった')
