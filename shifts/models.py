@@ -11,4 +11,4 @@ class Shift(models.Model):
     end_time = models.CharField(max_length=5)
 
     def __str__(self):
-        return f"{self.name} - {self.date}"
+        return f"{self.name} - {self.date} ({self.start_time} - {self.end_time})"

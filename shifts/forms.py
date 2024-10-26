@@ -11,7 +11,7 @@ class ShiftForm(forms.ModelForm):
         model = Shift
         fields = ['name', 'date', 'start_time', 'end_time']
 
-"""    def clean_start_time(self):
+    def clean_start_time(self):
         start_time_str = self.cleaned_data.get('start_time')#文字列から時間に変換
         try:
             start_time = datetime.strptime(start_time_str, '%H:%M').time()
@@ -44,4 +44,4 @@ class ShiftForm(forms.ModelForm):
 
             if start_time > end_time:
                 raise forms.ValidationError("有効な時間を入れて")
-        return start_time_str"""
+        return start_time_str
