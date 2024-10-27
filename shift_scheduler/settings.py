@@ -2,20 +2,20 @@ import os
 import environ
 import dj_database_url
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore,initialize_app
 import base64
 import json
 
-firebase_cred_json = base64.b64decode(os.getenv("FIREBASE_CREDENTIALS")).decode('utf-8')
-firebase_cred = credentials.Certificate(json.loads(firebase_cred_json))
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 環境変数の読み込み
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 # Firebaseの設定
 if not firebase_admin._apps:
-    firebase_cred = credentials.Certificate(env('GOOGLE_APPLICATION_CREDENTIALS'))
+    firebase_cred_json = base64.b64decode(env("FIREBASE_CREDENTIALS")).decode('utf-8')
+    firebase_cred = credentials.Certificate(json.loads(firebase_cred_json))
     firebase_admin.initialize_app(firebase_cred)
 db = firestore.client()  # Firestoreのクライアント
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
