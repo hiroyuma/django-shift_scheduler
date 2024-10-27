@@ -1,22 +1,41 @@
 import os
+import environ
 import dj_database_url
+import firebase_admin
+from firebase_admin import credentials, firestore
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 環境変数の読み込み
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# Firebaseの設定
+if not firebase_admin._apps:
+    firebase_cred = credentials.Certificate(env('GOOGLE_APPLICATION_CREDENTIALS'))
+    firebase_admin.initialize_app(firebase_cred)
+db = firestore.client()  # Firestoreのクライアント
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'your-secret-key'
+#SECRET_KEY = 'your-secret-key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = ['*']
 
+# settings.py
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/submit_shift/'
 
 # Application definition
 INSTALLED_APPS = [
@@ -61,9 +80,7 @@ WSGI_APPLICATION = 'shift_scheduler.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://your_database_user:your_database_password@your_database_host/your_database_name'
-    )
+    'default': dj_database_url.config(default=env('DATABASE_URL'))
 }
 
 # Password validation

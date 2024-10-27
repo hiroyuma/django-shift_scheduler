@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shift Scheduler</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>シフト希望提出フォーム</h1>
+    <form id="shift-form" method="post" action="{% url 'submit_shift' %}">
+        {% csrf_token %}
+        {% csrf_token %}
+        <label for="name">名前:</label>
+        <input type="text" id="name" name="name" value="{{ form.name.value }}" required><br>
+        <label for="shift_date">日付:</label>
+        <input type="date" id="shift_data" name="shift_date" value="{{ form.date.value }}" required><br>
+        <label for="start_time">出勤時間:</label> 
+        <select id="start_time" name="start_time" required></select><br> 
+        <label for="end_time">退勤時間:</label> 
+        <select id="end_time" name="end_time" required></select><br> 
+        <button type="submit">提出</button>
+    </form>
+
+    --<a href="{% url 'view_myshifts' %}">シフト希望の確認</a>
+
+    <script>
+        // 選択肢を生成する関数
+        function populateTimeSelect(selectId, startHour, endHour) {
+            var select = document.getElementById(selectId);
+            for (var hour = startHour; hour <= endHour; hour++) {
+                for (var minute = 0; minute < 60; minute += 15) { // 15分刻みの
+                    var option = document.createElement('option');
+                    var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minute).slice(-2); // 時間を文字列にフォーマット
+                    option.text = timeString;
+                    option.value = timeString;
+                    select.appendChild(option);
+                }
+            }
+        }
+
+        // ページのロード時に選択肢を生成
+        window.onload = function() {
+            populateTimeSelect('start_time', 18, 26);    //関数にいく
+            populateTimeSelect('end_time', 18, 26);      //関数にいく
+        };
+
+                // Ajaxでフォームを送信
+                document.getElementById('shift-form').onsubmit = function(event) {
+            event.preventDefault();  // ページリロードを防止
+
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action, true);
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // 成功時にフォームの入力内容をクリア
+                    document.getElementById('shift-form').reset();
+
+                    // 成功メッセージを表示またはリストに追加
+                    var response = JSON.parse(xhr.responseText);
+                    alert(response.message); // 成功メッセージの表示
+
+                    // 送信されたシフト情報をリストに追加
+                    var shiftList = document.getElementById('shift-list');
+                    var newItem = document.createElement('li');
+                    newItem.textContent = `${formData.get('shift_date')} : ${formData.get('start_time')} - ${formData.get('end_time')}`;
+                    shiftList.appendChild(newItem);
+                } else {
+                    // エラー処理
+                    alert('シフト希望の送信に失敗しました。');
+                }
+            };
+
+            xhr.send(formData);
+        };
+    </script>
+</body>
+</html>

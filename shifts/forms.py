@@ -9,7 +9,7 @@ class ShiftForm(forms.ModelForm):
     end_time = forms.CharField(max_length=5) 
     class Meta:
         model = Shift
-        fields = ['name', 'date', 'start_time', 'end_time']
+        fields = ['name', 'shift_date', 'start_time', 'end_time']
 
     def clean_start_time(self):
         start_time_str = self.cleaned_data.get('start_time')#文字列から時間に変換
@@ -30,18 +30,19 @@ class ShiftForm(forms.ModelForm):
             raise forms.ValidationError("有効な退勤時間を入れて。")
         return end_time_str
 
-    def clean(self):
-        cleaned_data = super().clean()
-        start_time_str = cleaned_data.get("start_time")
-        end_time_str = cleaned_data.get("end_time")
+def clean(self):
+    cleaned_data = super().clean()
+    start_time_str = cleaned_data.get("start_time")
+    end_time_str = cleaned_data.get("end_time")
 
-        if start_time_str and end_time_str:
-            start_time = datetime.strptime(start_time_str, '%H:%M').time()
-            hours, minutes = map(int, end_time_str.split(':'))
-            if hours >= 24:
-                hours -= 24
-            end_time = (datetime.min + timedelta(hours=hours, minutes=minutes)).time()
+    if start_time_str and end_time_str:
+        start_time = datetime.strptime(start_time_str, '%H:%M').time()
+        hours, minutes = map(int, end_time_str.split(':'))
+        if hours >= 24:
+            hours -= 24
+        end_time = (datetime.min + timedelta(hours=hours, minutes=minutes)).time()
 
-            if start_time > end_time:
-                raise forms.ValidationError("有効な時間を入れて")
-        return start_time_str
+        if start_time > end_time:
+            raise forms.ValidationError("有効な時間を入れて")
+
+    return cleaned_data  # cleaned_data全体を返す

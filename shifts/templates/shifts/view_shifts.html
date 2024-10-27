@@ -1,0 +1,45 @@
+<!-- shifts/view_shifts.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>シフト希望一覧</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>シフト希望一覧</h1>
+
+    {% if shifts %}
+    <table>
+        <thead>
+            <tr>
+                <th>名前</th>
+                <th>日付</th>
+                <th>出勤時間</th>
+                <th>退勤時間</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for shift in shifts %}
+            <tr>
+                <td>{{ shift.name }}</td>
+                <td>{{ shift.shift_date }}</td>
+                <td>{{ shift.start_time }}</td>
+                <td>{{ shift.end_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>シフト希望が見つかりません。</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <a href="{% url 'index' %}">ホームに戻る</a>
+</body>
+</html>
