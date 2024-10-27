@@ -5,10 +5,11 @@ import firebase_admin
 from firebase_admin import credentials, firestore,initialize_app
 import base64
 import json
+from pathlib import Path
 
 
 # 環境変数の読み込み
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
