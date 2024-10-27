@@ -3,8 +3,11 @@ import environ
 import dj_database_url
 import firebase_admin
 from firebase_admin import credentials, firestore
+import base64
+import json
 
-
+firebase_cred_json = base64.b64decode(os.getenv("FIREBASE_CREDENTIALS")).decode('utf-8')
+firebase_cred = credentials.Certificate(json.loads(firebase_cred_json))
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # 環境変数の読み込み
